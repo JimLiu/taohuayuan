@@ -1,0 +1,18 @@
+{
+  "name": "taohuayuan",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1 --port 5178",
+    "build": "vite build",
+    "assets": "sh tools/optimize-assets.sh",
+    "preview": "vite preview --port 5179"
+  },
+  "dependencies": {
+    "three": "^0.186.0"
+  },
+  "devDependencies": {
+    "vite": "^8.3.0"
+  }
+}

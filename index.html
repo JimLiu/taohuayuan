@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>桃源 · 豁然开朗</title>
+<meta name="description" content="《桃花源记》实时三维长卷：缘溪行、忽逢桃花林、舍船入山、豁然开朗。">
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="./src/ui/style.css">
+</head>
+<body data-cap="both">
+<canvas id="c" tabindex="0" aria-label="桃花源三维场景：拖动环顾"></canvas>
+
+<div id="load" role="status">
+  <div class="seal">
+    <!-- (sized and unfilled here too: without its stylesheet — a server restarting, a dropped connection — the ring
+         stays a thin ring, not a black disc across the page) -->
+    <svg viewBox="0 0 120 120" width="120" height="120" aria-hidden="true">
+      <circle class="track" cx="60" cy="60" r="46" fill="none" stroke="#d8d0c4" stroke-width="2"/>
+      <circle id="loadRing" class="ring" cx="60" cy="60" r="46" pathLength="1" fill="none" stroke="#a8322b" stroke-width="3"/>
+    </svg>
+    <div class="glyph">桃</div>
+  </div>
+  <p class="hint" id="loadMsg">山有小口，仿佛若有光</p>
+  <div id="loadErr" class="hidden">
+    <p id="loadErrMsg"></p>
+    <button id="btnReload" type="button">重新加载</button>
+  </div>
+</div>
+
+<div id="ui" class="hidden">
+  <header id="title">
+    <h1>桃源<span>·</span>豁然开朗</h1>
+    <p>陶渊明〔东晋〕《桃花源记》</p>
+  </header>
+
+  <div id="caption" aria-live="polite">
+    <div class="paper">
+      <div class="orig" id="capOrig"></div>
+      <div class="gloss" id="capGloss"></div>
+    </div>
+  </div>
+
+  <div id="holdTip" class="hidden" role="status">
+    <span id="holdMsg">本幕读完</span>
+    <button id="btnGoOn" type="button" class="accent">继续 ›</button>
+    <button id="btnAgain" type="button" class="hidden">重新开始</button>
+  </div>
+  <button id="btnRecenter" type="button" class="float hidden" title="回到本幕镜头 (R)">回正</button>
+
+  <div id="bottom">
+    <div id="sceneNote" class="idle-only" aria-live="polite">
+      <div id="sceneNo"></div>
+      <h2 id="sceneName"></h2>
+      <p id="sceneQuote"></p>
+    </div>
+    <div id="dockRow">
+      <div id="scenesWrap" class="idle-only">
+        <nav id="scenes" aria-label="场景导航"></nav>
+        <p id="lookHint"></p>
+      </div>
+      <nav id="controls" aria-label="控制">
+        <div id="playerTop" class="journey-only">
+          <span id="chapNo"></span><span id="chapName"></span><span id="clock"></span>
+        </div>
+        <div id="progress" class="journey-only" role="slider" tabindex="0" aria-label="进度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+          <div id="ticks"></div><div id="progressFill"></div><div id="progressKnob"></div><span id="scrubTip"></span>
+        </div>
+        <div id="bar">
+          <div class="transport journey-only">
+            <button id="btnPrev" type="button" class="icon" title="上一幕 (←)" aria-label="上一幕"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 5v14M18 5 9 12l9 7Z"/></svg></button>
+            <button id="btnPlay" type="button" class="play" title="暂停 / 继续 (空格)" aria-label="暂停" data-state="pause"><svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6v12M15 6v12"/></svg><svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 5.5v13l10-6.5Z"/></svg></button>
+            <button id="btnNext" type="button" class="icon" title="下一幕 (→)" aria-label="下一幕"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 5v14M6 5l9 7-9 7Z"/></svg></button>
+          </div>
+          <div class="tools">
+            <button id="btnToc" type="button" aria-haspopup="true" title="章节目录 (T)">目录</button>
+            <button id="btnVoice" type="button" aria-pressed="true" title="朗读 开／关 (V)">朗读 · 开</button>
+            <button id="btnMore" type="button" class="icon" aria-haspopup="true" aria-label="更多" title="更多"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5.5" cy="12" r="1.3"/><circle cx="12" cy="12" r="1.3"/><circle cx="18.5" cy="12" r="1.3"/></svg></button>
+            <button id="btnExit" type="button" class="journey-only" title="退出导览 (Esc)">退出</button>
+          </div>
+        </div>
+        <button id="btnJourney" type="button" class="primary idle-only" title="随原文进入故事 (Enter)">循文入境<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15m-5-5 5 5-5 5"/></svg></button>
+      </nav>
+    </div>
+  </div>
+
+  <section id="morePanel" class="pop hidden" aria-label="更多">
+    <div class="opt journey-only"><span>节奏</span><div class="seg" data-opt="pace"><button type="button" data-v="flow">连贯体验</button><button type="button" data-v="slow">逐章慢读</button></div></div>
+    <div class="opt"><span>字幕</span><div class="seg" data-opt="cap"><button type="button" data-v="both">原文＋白话</button><button type="button" data-v="orig">只看原文</button><button type="button" data-v="gloss">只看白话</button></div></div>
+    <div class="opt"><span>朗读</span><div class="seg" data-opt="voice"><button type="button" data-v="off">关</button><button type="button" data-v="on">开</button></div></div>
+    <div class="opt"><span>环境声</span><div class="seg" data-opt="amb"><button type="button" data-v="off">关</button><button type="button" data-v="on">开</button></div></div>
+    <div class="opt"><span>画质</span><div class="seg" data-opt="quality"><button type="button" data-v="high">高画质</button><button type="button" data-v="lite">轻量</button></div></div>
+    <div class="opt"><span>动态</span><div class="seg" data-opt="motion"><button type="button" data-v="on">播放</button><button type="button" data-v="off">暂停</button></div></div>
+    <div class="acts">
+      <button type="button" id="actReset">重置镜头</button>
+      <button type="button" id="actShot">保存画面</button>
+      <button type="button" id="actHide">隐藏界面</button>
+      <button type="button" id="actRestart" class="journey-only">重新开始</button>
+      <button type="button" id="actHelp">操作说明</button>
+    </div>
+  </section>
+
+  <section id="tocPanel" class="sheet hidden" aria-label="章节目录">
+    <header><h2>桃花源记</h2><span class="sub">点一句，从那里读起</span><button type="button" class="x" aria-label="关闭">×</button></header>
+    <ol id="tocList"></ol>
+  </section>
+
+  <section id="helpPanel" class="sheet hidden" aria-label="操作说明">
+    <header><h2>操作说明</h2><button type="button" class="x" aria-label="关闭">×</button></header>
+    <div class="help">
+      <h3>循文入境</h3>
+      <p>点「循文入境」，镜头随原文一句一句走过全篇。可暂停、上一幕／下一幕、拖动进度条跳到任意处，也可在「目录」里点任一句从那里读起。</p>
+      <p>「⋯」里可选<b>连贯体验</b>（自动往下）或<b>逐章慢读</b>（每幕读完停下，等你点「继续」）。</p>
+      <p>导览中拖动画面可在本幕镜头附近环顾，松手几秒后回到原镜头；点「回正」立即回正。</p>
+      <h3>信步游览（不在导览时）</h3>
+      <p>一开始在桃花林的溪上。底部的场景条按原文次序排着十处景致，点一处（或按数字键 1–0）即可前往。</p>
+      <table>
+        <tr><th>鼠标</th><td>拖动环顾 · 滚轮前进后退 · 双击某处走过去 · 单击景物看原文</td></tr>
+        <tr><th>键盘</th><td>W A S D／↑↓ 行走 · ← → 转身 · Shift 快走 · E／空格 升高 · Q／C 降低 · 1–0 切换场景 · R 回到桃林</td></tr>
+        <tr><th>触屏</th><td>单指拖动环顾 · 双指缩放 · 双击某处走过去 · 轻点景物看原文</td></tr>
+      </table>
+      <h3>导览中的按键</h3>
+      <table>
+        <tr><th>空格</th><td>暂停／继续</td></tr>
+        <tr><th>← →</th><td>上一幕／下一幕</td></tr>
+        <tr><th>R</th><td>回正</td></tr>
+        <tr><th>Esc</th><td>关闭面板；再按退出导览</td></tr>
+      </table>
+      <h3>通用</h3>
+      <table>
+        <tr><th>T</th><td>章节目录</td></tr>
+        <tr><th>V</th><td>朗读 开／关（默认开）</td></tr>
+        <tr><th>H</th><td>隐藏／显示界面</td></tr>
+        <tr><th>Enter</th><td>开始循文入境</td></tr>
+      </table>
+      <p class="fine">字幕里带下划线的词可点开释义。朗读为预先录制的音频，字幕按其时间标注逐句提示。</p>
+    </div>
+  </section>
+
+  <div id="word" class="pop hidden" role="dialog" aria-label="释义"><b></b><p></p></div>
+  <aside id="card" class="hidden" aria-live="polite">
+    <button type="button" class="x" aria-label="收起">×</button>
+    <h3></h3><p class="o"></p><p class="n"></p>
+  </aside>
+  <div id="toast" role="status" aria-live="polite"></div>
+
+  <div id="cut"><div id="cutText"></div></div>
+  <div id="dip"></div>
+</div>
+<button id="btnShowUI" type="button" class="hidden" title="显示界面 (H)">显示界面</button>
+
+<noscript><p class="noscript">此页面需要启用 JavaScript。</p></noscript>
+<script>
+  // index.html opened straight from the disk: browsers won't load its script module (or its models) over file://,
+  // so the page would never start. Said plainly instead
+  if (location.protocol === 'file:') setTimeout(function () {
+    if (window.__boot || !document.querySelector('script[type=module][src]')) return;
+    // (the built stylesheet is asked for with CORS too, which a file:// page is refused: asked for again, plainly)
+    var css = document.querySelector('link[rel=stylesheet][crossorigin]');
+    if (css) { var plain = css.cloneNode(); plain.removeAttribute('crossorigin'); css.replaceWith(plain); }
+    document.getElementById('loadMsg').classList.add('hidden');
+    document.getElementById('loadErr').classList.remove('hidden');
+    document.getElementById('btnReload').classList.add('hidden');
+    document.getElementById('loadErrMsg').textContent = '浏览器不允许从本地磁盘直接运行本页的脚本和模型。请通过网页服务器打开：例如在本页所在文件夹里运行 python3 -m http.server 8000，再访问 http://localhost:8000/。';
+  }, 2500);
+</script>
+<script type="module" src="./src/main.js"></script>
+</body>
+</html>

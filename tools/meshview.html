@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<title>Mesh View</title>
+<style>html,body{margin:0;height:100%;background:#cfd4d0;overflow:hidden}canvas{display:block}</style>
+</head>
+<body>
+<script type="module">
+import * as THREE from 'three';
+import { loadMSH, loadSKN } from '/src/core/msh.js';
+
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize(innerWidth, innerHeight);
+renderer.setPixelRatio(devicePixelRatio);
+document.body.appendChild(renderer.domElement);
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0xcfd4d0);
+const camera = new THREE.PerspectiveCamera(30, innerWidth / innerHeight, 0.01, 200);
+camera.position.set(0, 1.2, 6);
+scene.add(new THREE.HemisphereLight(0xffffff, 0x777766, 1.6));
+const sun = new THREE.DirectionalLight(0xffffff, 2.2); sun.position.set(3, 5, 4); scene.add(sun);
+
+const grey = new THREE.MeshStandardMaterial({ color: 0xbbb6aa, roughness: 0.8 });
+const objs = {};
+const place = (o, x) => { o.position.x = x; scene.add(o); return o; };
+
+// the skinned boatman, coloured by the bone each vertex follows most
+const S = await loadSKN('/assets-src/web/ref/boatman.msh');
+{
+  const g = S.geometry, si = g.attributes.skinIndex, sw = g.attributes.skinWeight, C = new Float32Array(si.count * 3);
+  const pal = S.bones.map((b, i) => new THREE.Color().setHSL((i * 0.137) % 1, 0.55, 0.6));
+  for (let v = 0; v < si.count; v++) {
+    let best = 0, bw = -1;
+    for (let k = 0; k < 4; k++) if (sw.getComponent(v, k) > bw) { bw = sw.getComponent(v, k); best = si.getComponent(v, k); }
+    C.set([pal[best].r, pal[best].g, pal[best].b], v * 3);
+  }
+  g.setAttribute('color', new THREE.BufferAttribute(C, 3));
+}
+const root = new THREE.Group(), arm = new THREE.Group(); arm.scale.setScalar(0.01); root.add(arm);
+const bones = S.bones.map((b) => { const o = new THREE.Bone(); o.name = b.name; o.position.fromArray(b.t); o.quaternion.fromArray(b.r); o.scale.fromArray(b.s); return o; });
+S.bones.forEach((b, i) => (b.parent >= 0 ? bones[b.parent] : arm).add(bones[i]));
+const skMat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.8, vertexColors: false });
+const sk = new THREE.SkinnedMesh(S.geometry, skMat);
+sk.frustumCulled = false;
+root.add(sk);
+sk.bind(new THREE.Skeleton(bones, S.bones.map((b) => new THREE.Matrix4().fromArray(b.ibm))), new THREE.Matrix4());
+objs.boatman = place(root, -1.5);
+objs.boatSkel = new THREE.SkeletonHelper(arm); scene.add(objs.boatSkel); objs.boatSkel.visible = false;
+
+// the meshes the scene doesn't use were moved out of public/ (the dev server still serves them from assets-src)
+const refPath = (k) => (['boatman', 'monk', 'fern_02', 'rock_moss_set_02_lo'].includes(k) ? `/assets-src/web/ref/${k}.msh` : `/assets-src/ref-unused/${k}.msh`);
+for (const [k, x, h] of [['woman', 0, 1.95], ['monk', 1.5, 1.62]]) {
+  const [g] = await loadMSH(refPath(k));
+  const m = new THREE.Mesh(g, grey);
+  const bb = g.boundingBox, s = h / (bb.max.y - bb.min.y);
+  m.scale.setScalar(s); m.position.y = -bb.min.y * s;
+  const o = new THREE.Group(); o.add(m);
+  objs[k] = place(o, x);
+}
+let x = 4;
+for (const k of ['rock_face_01', 'rock_moss_set_01', 'rock_moss_set_02', 'fern_02', 'root_cluster_01']) {
+  const gs = await loadMSH(refPath(k));
+  const o = new THREE.Group();
+  let ox = 0;
+  for (const g of gs) { const m = new THREE.Mesh(g, grey); m.position.x = ox; ox += (g.boundingBox.max.x - g.boundingBox.min.x) + 0.3; o.add(m); }
+  objs[k] = place(o, x);
+  x += ox + 1;
+}
+window.__v = { THREE, scene, camera, renderer, objs, S, bones, sk, skMat, render: () => renderer.render(scene, camera) };
+window.__look = (p, l) => { camera.position.set(...p); camera.lookAt(new THREE.Vector3(...l)); };
+renderer.setAnimationLoop(() => renderer.render(scene, camera));
+</script>
+</body>
+</html>
