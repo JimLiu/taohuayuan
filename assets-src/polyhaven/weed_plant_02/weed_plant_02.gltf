@@ -1,0 +1,504 @@
+{
+  "asset": {
+    "generator": "Khronos glTF Blender I/O v4.0.44",
+    "version": "2.0"
+  },
+  "scene": 0,
+  "scenes": [
+    {
+      "name": "Scene",
+      "nodes": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "mesh": 0,
+      "name": "weed_plant_02_a_LOD0"
+    },
+    {
+      "mesh": 1,
+      "name": "weed_plant_02_b_LOD0",
+      "translation": [
+        0.5,
+        0,
+        0
+      ]
+    },
+    {
+      "mesh": 2,
+      "name": "weed_plant_02_c_LOD0",
+      "translation": [
+        1,
+        0,
+        0
+      ]
+    },
+    {
+      "mesh": 3,
+      "name": "weed_plant_02_d_LOD0",
+      "translation": [
+        1.500000238418579,
+        0,
+        0
+      ]
+    },
+    {
+      "mesh": 4,
+      "name": "weed_plant_02_e_LOD0",
+      "translation": [
+        2,
+        0,
+        0
+      ]
+    }
+  ],
+  "materials": [
+    {
+      "alphaCutoff": 0.5,
+      "alphaMode": "MASK",
+      "doubleSided": true,
+      "name": "weed_plant_02",
+      "normalTexture": {
+        "index": 0
+      },
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 1
+        },
+        "metallicFactor": 0,
+        "metallicRoughnessTexture": {
+          "index": 2
+        }
+      }
+    }
+  ],
+  "meshes": [
+    {
+      "name": "Plane.001",
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 0,
+            "NORMAL": 1,
+            "TEXCOORD_0": 2
+          },
+          "indices": 3,
+          "material": 0
+        }
+      ]
+    },
+    {
+      "name": "Plane.003",
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 4,
+            "NORMAL": 5,
+            "TEXCOORD_0": 6
+          },
+          "indices": 7,
+          "material": 0
+        }
+      ]
+    },
+    {
+      "name": "Plane.033",
+      "primitives": [
+        {
+          "attributes": {
+            "COLOR_0": 8,
+            "POSITION": 9,
+            "NORMAL": 10,
+            "TEXCOORD_0": 11
+          },
+          "indices": 12,
+          "material": 0
+        }
+      ]
+    },
+    {
+      "name": "Plane.042",
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 13,
+            "NORMAL": 14,
+            "TEXCOORD_0": 15
+          },
+          "indices": 16,
+          "material": 0
+        }
+      ]
+    },
+    {
+      "name": "Plane.012",
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 17,
+            "NORMAL": 18,
+            "TEXCOORD_0": 19
+          },
+          "indices": 20,
+          "material": 0
+        }
+      ]
+    }
+  ],
+  "textures": [
+    {
+      "sampler": 0,
+      "source": 0
+    },
+    {
+      "sampler": 0,
+      "source": 1
+    },
+    {
+      "sampler": 0,
+      "source": 2
+    }
+  ],
+  "images": [
+    {
+      "mimeType": "image/jpeg",
+      "name": "weed_plant_02_nor_gl",
+      "uri": "textures/weed_plant_02_nor_gl_1k.jpg"
+    },
+    {
+      "mimeType": "image/jpeg",
+      "name": "weed_plant_02_diff-weed_plant_02_alpha",
+      "uri": "textures/weed_plant_02_diff_1k.jpg"
+    },
+    {
+      "mimeType": "image/jpeg",
+      "name": "weed_plant_02_rough",
+      "uri": "textures/weed_plant_02_arm_1k.jpg"
+    }
+  ],
+  "accessors": [
+    {
+      "bufferView": 0,
+      "componentType": 5126,
+      "count": 2059,
+      "max": [
+        0.13378866016864777,
+        0.06389475613832474,
+        0.17979809641838074
+      ],
+      "min": [
+        -0.08561167120933533,
+        -0.00856288243085146,
+        -0.11112131178379059
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 1,
+      "componentType": 5126,
+      "count": 2059,
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "componentType": 5126,
+      "count": 2059,
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 3,
+      "componentType": 5123,
+      "count": 8901,
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 4,
+      "componentType": 5126,
+      "count": 1656,
+      "max": [
+        0.11226735264062881,
+        0.06651004403829575,
+        0.08741479367017746
+      ],
+      "min": [
+        -0.07528062909841537,
+        -0.001182800973765552,
+        -0.11112130433320999
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 5,
+      "componentType": 5126,
+      "count": 1656,
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 6,
+      "componentType": 5126,
+      "count": 1656,
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 7,
+      "componentType": 5123,
+      "count": 6819,
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 8,
+      "componentType": 5123,
+      "count": 1199,
+      "normalized": true,
+      "type": "VEC4"
+    },
+    {
+      "bufferView": 9,
+      "componentType": 5126,
+      "count": 1199,
+      "max": [
+        0.0803200751543045,
+        0.053356561809778214,
+        0.07560799270868301
+      ],
+      "min": [
+        -0.062056250870227814,
+        -0.0015672353329136968,
+        -0.0678434818983078
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 10,
+      "componentType": 5126,
+      "count": 1199,
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 11,
+      "componentType": 5126,
+      "count": 1199,
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 12,
+      "componentType": 5123,
+      "count": 5298,
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 13,
+      "componentType": 5126,
+      "count": 1428,
+      "max": [
+        0.07741555571556091,
+        0.03851133957505226,
+        0.046274278312921524
+      ],
+      "min": [
+        -0.07664976269006729,
+        -0.0004347926005721092,
+        -0.06183432415127754
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 14,
+      "componentType": 5126,
+      "count": 1428,
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 15,
+      "componentType": 5126,
+      "count": 1428,
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 16,
+      "componentType": 5123,
+      "count": 5784,
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 17,
+      "componentType": 5126,
+      "count": 1614,
+      "max": [
+        0.039641283452510834,
+        0.0366172157227993,
+        0.027607137337327003
+      ],
+      "min": [
+        -0.07960858196020126,
+        -0.0034620026126503944,
+        -0.03337923809885979
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 18,
+      "componentType": 5126,
+      "count": 1614,
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 19,
+      "componentType": 5126,
+      "count": 1614,
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 20,
+      "componentType": 5123,
+      "count": 6546,
+      "type": "SCALAR"
+    }
+  ],
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteLength": 24708,
+      "byteOffset": 0,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 24708,
+      "byteOffset": 24708,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 16472,
+      "byteOffset": 49416,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 17802,
+      "byteOffset": 65888,
+      "target": 34963
+    },
+    {
+      "buffer": 0,
+      "byteLength": 19872,
+      "byteOffset": 83692,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 19872,
+      "byteOffset": 103564,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 13248,
+      "byteOffset": 123436,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 13638,
+      "byteOffset": 136684,
+      "target": 34963
+    },
+    {
+      "buffer": 0,
+      "byteLength": 9592,
+      "byteOffset": 150324,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 14388,
+      "byteOffset": 159916,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 14388,
+      "byteOffset": 174304,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 9592,
+      "byteOffset": 188692,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 10596,
+      "byteOffset": 198284,
+      "target": 34963
+    },
+    {
+      "buffer": 0,
+      "byteLength": 17136,
+      "byteOffset": 208880,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 17136,
+      "byteOffset": 226016,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 11424,
+      "byteOffset": 243152,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 11568,
+      "byteOffset": 254576,
+      "target": 34963
+    },
+    {
+      "buffer": 0,
+      "byteLength": 19368,
+      "byteOffset": 266144,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 19368,
+      "byteOffset": 285512,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 12912,
+      "byteOffset": 304880,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 13092,
+      "byteOffset": 317792,
+      "target": 34963
+    }
+  ],
+  "samplers": [
+    {
+      "magFilter": 9729,
+      "minFilter": 9987
+    }
+  ],
+  "buffers": [
+    {
+      "byteLength": 330884,
+      "uri": "weed_plant_02.bin"
+    }
+  ]
+}
