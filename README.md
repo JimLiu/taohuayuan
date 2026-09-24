@@ -2,6 +2,8 @@
 
 《桃花源记》实时三维长卷（three.js）。春日薄雾的清晨，从武陵溪口出发，缘溪行、逢桃林、舍船入山，豁然开朗。
 
+<img width="3840" height="2160" alt="taohuayuan-screenshot" src="https://github.com/user-attachments/assets/70dc2698-79a9-4eca-970e-a14f48ead553" />
+
 ## 打开方式
 
 | 用途 | 做法 |
